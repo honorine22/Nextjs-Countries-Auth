@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Navbar from '../../components/navbar';
+import Layout from '../../components/layout'
 import { useState, useEffect } from 'react';
 import { GoArrowLeft } from 'react-icons/go';
 
@@ -24,9 +24,8 @@ export default function DetailPage({ country }) {
 		getBorders();
 	}, []);
 	return (
-		<div className="min-h-screen text-dark-elements bg-light-bg dark:bg-dark-bg dark:text-light-elements">
-			<Navbar />
-			<div className="flex py-8 mx-8 mb-4 md:mx-16 lg:mb-8 xl:max-w-screen-xl xl:mx-auto">
+		<Layout>
+			<div className="flex py-8 mx-8 md:mx-16 lg:mb-8 xl:max-w-screen-xl xl:mx-auto">
 				<Link href="/">
 					<button className="flex md:ml-40 items-center px-8 pt-4 mt-16 rounded shadow focus-within:ring bg-light-elements dark:bg-dark-elements focus:outline-none hover:bg-opacity-5">
 						<GoArrowLeft /> Back
@@ -88,21 +87,6 @@ export default function DetailPage({ country }) {
 					<div className="mt-8 xl:max-w-lg">
 						<span className="font-semibold">Borders: </span>
 						<br />
-
-						{/* {country.borders.length > 0 ? (
-							country.borders.map((border, i) => (
-								<Link href={'/countries/' + border} key={i}>
-									<button
-										className="px-4 py-2 mt-2 mr-2 rounded shadow focus-within:ring bg-light-elements dark:bg-dark-elements focus:outline-none hover:bg-opacity-5 dark:hover:bg-opacity-75"
-										key={country.alpha3Code}
-									>
-										{border}
-									</button>
-								</Link>
-							))
-						) : (
-							<p>None</p>
-						)} */}
 						{borders > 0 ? (borders.map(({ flag, name }) => (
 							<div className="px-4 py-2 mt-2 mr-2 rounded shadow focus-within:ring bg-light-elements dark:bg-dark-elements focus:outline-none hover:bg-opacity-5 dark:hover:bg-opacity-75" key={name}>
 								<img src={flag} alt={name}></img>
@@ -115,7 +99,7 @@ export default function DetailPage({ country }) {
 					</div>
 				</div>
 			</div>
-		</div>
+		</Layout>
 	);
 }
 

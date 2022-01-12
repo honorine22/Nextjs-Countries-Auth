@@ -1,40 +1,24 @@
-import NextAuth from 'next-auth';
-import Providers from 'next-auth/providers';
-import { compare } from 'bcryptjs';
-import { connectToDatabase } from '../../../lib/db';
-export default NextAuth({
-	//Configure JWT
-	session: {
-		jwt: true
-	},
-	//Specify Provider
-	providers: [
-		Providers.Credentials({
-			async authorize(credentials) {
-				//Connect to DB
-				const client = await connectToDatabase();
-				//Get all the users
-				const users = await client.db().collection('users');
-				//Find user with the email
-				const result = await users.findOne({
-					email: credentials.email
-				});
-				//Not found - send error res
-				if (!result) {
-					client.close();
-					throw new Error('No user found with the email');
-				}
-				//Check hased password with DB password
-				const checkPassword = await compare(credentials.password, result.passSword);
-				//Incorrect password - send response
-				if (!checkPassword) {
-					client.close();
-					throw new Error('Password doesnt match');
-				}
-				//Else send success response
-				client.close();
-				return { email: result.email };
-			}
-		})
-	]
-});
+// pages/api/auth/[...nextauth].js
+import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
+import GithubProvider from "next-auth/providers/github"
+import TwitterProvider from 'next-auth/providers/twitter';
+const options = {
+  providers: [
+    // OAuth authentication providers
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    GithubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }),
+    TwitterProvider({
+      clientId: process.env.TWITTER_CLIENT_ID,
+      clientSecret: process.env.TWITTER_CLIENT_SECRET,
+    }),
+  ],
+  database: process.env.DB_URL
+}
+export default (req, res) => NextAuth(req, res, options)

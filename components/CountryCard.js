@@ -1,7 +1,7 @@
 import Link from "next/link";
 const CountryCard = ({ countries, keyword }) => {
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-x-16 gap-y-8 px-4">
+		<div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-x-16 gap-y-8 px-4">
 			{countries &&
 				countries
 					.filter(

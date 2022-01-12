@@ -1,20 +1,17 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useSession, signIn, signOut } from "next-auth/react"
 import Toggle from '../theme/themeToggle';
-import { useSession, signOut } from 'next-auth/client';
+import { useState } from 'react';
+
 export default function Navbar() {
-	const [session, loading] = useSession();
-	function logoutHandler() {
-		signOut();
-	}
+	const { data: session } = useSession()
 	const [active, setActive] = useState(false);
 
 	const handleClick = () => {
 		setActive(!active);
 	};
-
 	return (
-		<nav className="lg:bg-white z-40 bg-gray-600 h-16 fixed w-full shadow-md dark:bg-gray-900">
+		<nav className="lg:bg-white z-40 bg-gray-600 h-16 fixed top-0 w-full shadow-md dark:bg-gray-900 dark:text-white">
 			<div className="lg:flex cursor-pointer justify-around md:flex">
 				{/* Align Name with Toggle Icon */}
 				<div className="flex items-center justify-between">
@@ -32,7 +29,7 @@ export default function Navbar() {
 					<div className="flex md:hidden lg:hidden">
 						<button onClick={handleClick}
 							type="button"
-							className="bg-white rounded-md p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+							className="bg-white rounded-md p-2 text-gray-400  hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
 							<svg
 								className="h-6 w-6"
 								xmlns="http://www.w3.org/2000/svg"
@@ -60,53 +57,51 @@ export default function Navbar() {
 						</button>
 					</div>
 				</div>
-				{/* <div className={`${active ? 'bg-gray-600' : 'hidden'} `}> */}
-					<li className={`${active ? 'bg-gray-600' : 'hidden'} py-4 mt-2 sm:flex block text-sm text-white lg:text-gray-600 capitalize hover:text-blue-700`}>
-						<Link href="/">
-							<a> Home</a>
-						</Link>
-					</li>
+				<li className={`${active ? 'bg-gray-600' : 'hidden'} py-4 mt-2 sm:flex block text-sm text-white dark:text-white lg:text-gray-600 capitalize hover:text-blue-700`}>
+					<Link href="/">
+						<a> Home</a>
+					</Link>
+				</li>
 
-					<li className="py-4 mt-2 sm:flex block text-sm text-white lg:text-gray-600 capitalize hover:text-blue-700">
-						<Link href="/">
-							<a>All Countries</a>
-						</Link>
-					</li>
-					<div className="lg:flex-row flex md:flex-row flex-col cursor-pointer lg:justify-end">
-						{!session &&
-							!loading && (
-								<button className="h-10 mt-2 px-4 bg-blue-400 hover:bg-blue-700 text-white font-bold md:py-0 rounded-lg lg:rounded-xl">
-									<Link href="/auth-login">
-										<a>
-											<span>Login</span>
-										</a>
-									</Link>
-								</button>
-							)}
-						{session && (
-							<li>
-								<Link href="/profile">Profile</Link>
-							</li>
-						)}
-						{session && (
-							<li>
-								<button onClick={logoutHandler}>Logout</button>
-							</li>
-						)}
-						<button className="h-10 border-1 hover:border-blue-700 border-blue-400 lg:ml-8 mt-2 px-4 border-blue border text-blue-400 bg-white font-bold md:py-0 rounded-lg lg:rounded-xl">
-							<Link href="/auth-register">
-								<a>
-									<span>Sign Up</span>
-								</a>
-							</Link>
-						</button>
-					</div>
+				<li className="py-4 mt-2 sm:flex block text-sm text-white dark:text-white lg:text-gray-600 capitalize hover:text-blue-700">
+					<Link href="/">
+						<a>All Countries</a>
+					</Link>
+				</li>
+				<li className="py-4 mt-2 sm:flex block text-sm 
+				text-white dark:text-white lg:text-gray-600 capitalize 
+				hover:text-blue-700">
+					{session ? (
+						<>
+							{session.user.email} <button onClick={() => signOut()}>Sign out</button>
+						</>
+					) : (
+						<button onClick={() => signIn()}>Sign in</button>
+					)}
+				</li>
 
-					<li className="py-2 sm:flex block text-sm text-white lg:text-gray-600 capitalize hover:text-blue-700">
-						<Toggle />
-					</li>
+				<div className="lg:flex-row flex md:flex-row flex-col cursor-pointer lg:justify-end">
+					<button className="h-10 mt-2 px-4 dark:text-white bg-blue-400 hover:bg-blue-700 text-white font-bold md:py-0 rounded-lg lg:rounded-xl">
+						<Link href="/login">
+							<a>
+								<span>Login</span>
+							</a>
+						</Link>
+					</button>
+
+					<button className="h-10 border-1 dark:text-blue-400 hover:border-blue-700 border-blue-400 lg:ml-8 mt-2 px-4 border-blue border text-blue-400 font-bold md:py-0 rounded-lg lg:rounded-xl">
+						<Link href="/register">
+							<a>
+								<span>Sign Up</span>
+							</a>
+						</Link>
+					</button>
 				</div>
-			{/* </div> */}
+
+				<li className="py-2 sm:flex block text-sm dark:text-white text-white lg:text-gray-600 capitalize hover:text-blue-700">
+					<Toggle />
+				</li>
+			</div>
 		</nav>
-	);
+	)
 }
