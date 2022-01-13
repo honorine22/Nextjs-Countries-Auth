@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@hookform/resolvers": "^2.8.3",
     "assert": "^2.0.0",
     "bcrypt": "^5.0.1",

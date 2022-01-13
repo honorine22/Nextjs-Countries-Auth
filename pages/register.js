@@ -44,7 +44,7 @@ const Register = () => {
 				if (data && data.token) {
 					// Set cookies
 					cookie.set('token', data.token, { expires: 2 });
-					Router.push('/');
+					Router.push('/login');
 				}
 			});
 

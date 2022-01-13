@@ -3,9 +3,10 @@ import 'tailwindcss/tailwind.css';
 import '../styles/index.css';
 import { AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from 'next-themes';
+import '@fortawesome/fontawesome-free/css/all.css';
 import { SessionProvider } from 'next-auth/react';
 import Router from 'next/router'
-import Spinner from '../components/Spinner'
+// import Spinner from '../components/Spinner'
 function MyApp({ Component, pageProps: { session, ...pageProps }, router }) {
 	const [isMounted, setIsMounted] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, router }) {
 		<ThemeProvider attribute="class">
 			<SessionProvider session={session}>
 				<AnimatePresence>
-					{loading && <Spinner />}
+					{/* {loading && <Spinner />} */}
 					<Component {...pageProps} key={router.route} />
 				</AnimatePresence>
 			</SessionProvider>
